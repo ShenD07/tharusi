@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birthday Love Website</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- COUNTDOWN / PRE-REVEAL -->
+  <div class="pre-reveal" id="preReveal">
+    <div class="countdown-theme-overlay" id="countdownThemeOverlay"></div>
+    <div class="countdown-rain" id="countdownRain"></div>
+    <div class="countdown-particles" id="countdownParticles"></div>
+
+    <div class="countdown-stage" id="countdownStage">
+      <div class="countdown-shell glass">
+        <div class="countdown-grid">
+          <div class="count-card">
+            <div class="num" id="days">000</div>
+            <div class="label">Days</div>
+          </div>
+          <div class="count-card">
+            <div class="num" id="hours">00</div>
+            <div class="label">Hours</div>
+          </div>
+          <div class="count-card">
+            <div class="num" id="minutes">00</div>
+            <div class="label">Minutes</div>
+          </div>
+          <div class="count-card">
+            <div class="num" id="seconds">00</div>
+            <div class="label">Seconds</div>
+          </div>
+        </div>
+        <div class="countdown-clue" id="countdownClue"></div>
+      </div>
+    </div>
+
+    <div class="gift-stage hidden" id="giftStage">
+      <div class="gift-aura"></div>
+
+      <button class="gift-trigger" id="giftTrigger" aria-label="Open gift">
+        <svg class="gift-svg" viewBox="0 0 420 430" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="boxBody" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffbfdc"/>
+              <stop offset="100%" stop-color="#f06aa6"/>
+            </linearGradient>
+            <linearGradient id="boxLid" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffd7e9"/>
+              <stop offset="100%" stop-color="#f58fbe"/>
+            </linearGradient>
+            <linearGradient id="goldRibbon" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#fff9d8"/>
+              <stop offset="100%" stop-color="#ffe07b"/>
+            </linearGradient>
+            <radialGradient id="innerLight" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="rgba(255,255,255,1)" />
+              <stop offset="40%" stop-color="rgba(255,214,232,0.9)" />
+              <stop offset="100%" stop-color="rgba(255,214,232,0)" />
+            </radialGradient>
+            <filter id="softShadow" x="-30%" y="-30%" width="160%" height="180%">
+              <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="rgba(0,0,0,0.28)" />
+            </filter>
+          </defs>
+
+          <ellipse cx="210" cy="390" rx="120" ry="22" fill="rgba(0,0,0,0.18)" />
+
+          <g class="gift-box-wrap" filter="url(#softShadow)">
+            <g class="gift-base-group">
+              <rect x="85" y="175" rx="26" ry="26" width="250" height="180" fill="url(#boxBody)" stroke="rgba(255,255,255,0.45)" />
+              <rect x="195" y="175" width="30" height="180" fill="url(#goldRibbon)" />
+              <rect x="85" y="245" width="250" height="26" fill="url(#goldRibbon)" />
+            </g>
+
+            <g class="gift-light">
+              <ellipse cx="210" cy="205" rx="96" ry="60" fill="url(#innerLight)" />
+            </g>
+
+            <g class="gift-lid-group">
+              <rect x="70" y="120" rx="24" ry="24" width="280" height="82" fill="url(#boxLid)" stroke="rgba(255,255,255,0.5)" />
+              <rect x="196" y="120" width="28" height="82" fill="url(#goldRibbon)" />
+              <rect x="70" y="148" width="280" height="24" fill="url(#goldRibbon)" />
+
+              <g class="gift-bow-group">
+                <ellipse cx="176" cy="118" rx="34" ry="22" fill="#ffe88d" transform="rotate(-18 176 118)" />
+                <ellipse cx="244" cy="118" rx="34" ry="22" fill="#ffe88d" transform="rotate(18 244 118)" />
+                <rect x="197" y="96" width="26" height="34" rx="10" fill="#fff0a2" />
+              </g>
+            </g>
+          </g>
+        </svg>
+      </button>
+
+      <div class="gift-hint">Tap to open</div>
+    </div>
+  </div>
+
+  <!-- REVEAL POPUP -->
+  <div class="wish-overlay" id="wishOverlay">
+    <div class="wish-card">
+      <h2>Happy Birthday Sudu 💖</h2>
+      <p>Made with love, just for you.</p>
+      <button class="btn-primary" id="enterMainPageBtn">Continue</button>
+    </div>
+    <div class="confetti-layer" id="confettiLayer"></div>
+    <div class="balloon-layer" id="balloonLayer"></div>
+  </div>
+
+  <!-- MAIN PAGE -->
+  <main id="mainPage" class="main-page hidden">
+    <div class="floating-love" id="floatingLove"></div>
+
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="pill">✨ Made with love, memories, and a little magic</div>
+          <h1>
+            Happy Birthday,
+            <span class="gradient-text">My Beautiful Love</span>
+          </h1>
+
+          <div class="typewriter" id="typewriter"></div>
+
+          <p class="description">
+            This is not just a birthday page. It is a little digital love story — with your photos, sweet memories,
+            heartfelt messages, and surprises made only for her special day.
+          </p>
+
+          <div class="btn-row">
+            <button class="btn-outline" id="openLetterBtn">🎁 Open Love Letter</button>
+          </div>
+        </div>
+
+        <div class="hero-card-wrap">
+          <div class="glow"></div>
+          <div class="hero-card glass">
+            <div class="hero-image-box">
+              <img id="mainPhoto" src="" alt="Memory" />
+              <div class="caption-overlay" id="mainCaption"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- LOVE LETTER -->
+  <div class="modal" id="letterModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h4>My Love Letter to You</h4>
+        <button class="ghost-btn" id="closeLetterBtn">Close</button>
+      </div>
+      <div class="modal-content">
+        <p>My love,</p>
+        <p>
+          On your birthday, I just want to remind you how deeply special you are to me. You are not only beautiful,
+          but also gentle, kind, strong, and unforgettable in every possible way.
+        </p>
+        <p>
+          Thank you for being my happiness, my comfort, and one of the best parts of my life. I hope this year gives you
+          more smiles, more peace, more success, and more moments that make your heart feel full.
+        </p>
+        <p>
+          I love you more than words can fully explain. Happy birthday, baby. 💖
+        </p>
+        <p class="sign">— Yours forever</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
