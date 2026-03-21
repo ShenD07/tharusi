@@ -7,15 +7,15 @@ const CONFIG = {
 
 const photos = [
   {
-    src: "tharusi/img1.png",
+    src: "/img1.png",
     caption: "Replace this with your favorite photo together 💕",
   },
   {
-    src: "img2.png",
+    src: "/img2.png",
     caption: "A memory that still makes you smile ✨",
   },
   {
-    src: "img3.png",
+    src: "/img3.png",
     caption: "Her cutest moment ever 🌸",
   },
 ];
