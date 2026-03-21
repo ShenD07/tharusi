@@ -7,14 +7,16 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- COUNTDOWN / PRE-REVEAL -->
+  <!-- PRE REVEAL -->
   <div class="pre-reveal" id="preReveal">
     <div class="countdown-theme-overlay" id="countdownThemeOverlay"></div>
     <div class="countdown-rain" id="countdownRain"></div>
     <div class="countdown-particles" id="countdownParticles"></div>
+    <div class="floating-love countdown-floating" id="countdownFloatingLove"></div>
 
     <div class="countdown-stage" id="countdownStage">
-      <div class="countdown-shell glass">
+      <div class="countdown-center">
+        <h1 class="countdown-title">A surprise is waiting for you 💖</h1>
         <div class="countdown-grid">
           <div class="count-card">
             <div class="num" id="days">000</div>
@@ -56,8 +58,8 @@
               <stop offset="100%" stop-color="#ffe07b"/>
             </linearGradient>
             <radialGradient id="innerLight" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="rgba(255,255,255,1)" />
-              <stop offset="40%" stop-color="rgba(255,214,232,0.9)" />
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="40%" stop-color="#ffd6e8" />
               <stop offset="100%" stop-color="rgba(255,214,232,0)" />
             </radialGradient>
             <filter id="softShadow" x="-30%" y="-30%" width="160%" height="180%">
@@ -93,28 +95,18 @@
         </svg>
       </button>
 
-      <div class="gift-hint">Tap to open</div>
+      <p class="gift-text">Tap to open your surprise 🎁</p>
     </div>
-  </div>
-
-  <!-- REVEAL POPUP -->
-  <div class="wish-overlay" id="wishOverlay">
-    <div class="wish-card">
-      <h2>Happy Birthday Sudu 💖</h2>
-      <p>Made with love, just for you.</p>
-      <button class="btn-primary" id="enterMainPageBtn">Continue</button>
-    </div>
-    <div class="confetti-layer" id="confettiLayer"></div>
-    <div class="balloon-layer" id="balloonLayer"></div>
   </div>
 
   <!-- MAIN PAGE -->
-  <main id="mainPage" class="main-page hidden">
+  <div class="main-page hidden" id="mainPage">
     <div class="floating-love" id="floatingLove"></div>
 
     <section class="hero">
+      <div class="absolute-overlay"></div>
       <div class="container hero-grid">
-        <div>
+        <div class="hero-left fade-up">
           <div class="pill">✨ Made with love, memories, and a little magic</div>
           <h1>
             Happy Birthday,
@@ -129,11 +121,16 @@
           </p>
 
           <div class="btn-row">
-            <button class="btn-outline" id="openLetterBtn">🎁 Open Love Letter</button>
+            <button class="btn-outline" id="openLetterBtn">
+              🎁 Open Love Letter
+            </button>
+            <button class="btn-primary" id="openSurpriseBtn">
+              ✨ Celebrate
+            </button>
           </div>
         </div>
 
-        <div class="hero-card-wrap">
+        <div class="hero-right fade-scale">
           <div class="glow"></div>
           <div class="hero-card glass">
             <div class="hero-image-box">
@@ -144,7 +141,7 @@
         </div>
       </div>
     </section>
-  </main>
+  </div>
 
   <!-- LOVE LETTER -->
   <div class="modal" id="letterModal">
@@ -167,6 +164,17 @@
           I love you more than words can fully explain. Happy birthday, baby. 💖
         </p>
         <p class="sign">— Yours forever</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIRTHDAY POPUP -->
+  <div class="surprise-overlay" id="surpriseOverlay">
+    <div class="surprise-message">
+      <h2>Happy Birthday, Sudu 💖</h2>
+      <p>You are loved more than you know.</p>
+      <div class="mt-5">
+        <button class="btn-primary" id="closeSurpriseBtn">Close Surprise</button>
       </div>
     </div>
   </div>
