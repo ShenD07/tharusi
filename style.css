@@ -81,14 +81,25 @@ button {
   transform: translateY(-2px);
 }
 
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 10px 16px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  font-size: 14px;
+}
+
 /* PRE REVEAL */
 .pre-reveal {
   position: fixed;
   inset: 0;
-  z-index: 200;
+  z-index: 120;
   overflow: hidden;
+  background: linear-gradient(to bottom, var(--bg1), var(--bg2), var(--bg3));
 }
-
 
 .countdown-theme-overlay,
 .countdown-rain,
@@ -96,52 +107,55 @@ button {
   position: absolute;
   inset: 0;
 }
+
+.countdown-theme-overlay {
+  z-index: 1;
+  pointer-events: none;
 }
 
 .theme-romantic-pink {
   background:
     radial-gradient(circle at top, rgba(255,255,255,0.15), transparent 35%),
-    radial-gradient(circle at bottom, rgba(255,105,180,0.18), transparent 25%),
-    linear-gradient(180deg, rgba(63, 0, 31, 0.32), rgba(74, 0, 53, 0.64));
+    radial-gradient(circle at bottom, rgba(255,105,180,0.18), transparent 25%);
 }
 
 .theme-rainy-rose {
   background:
-    radial-gradient(circle at top, rgba(255,255,255,0.13), transparent 32%),
-    linear-gradient(180deg, rgba(48, 0, 30, 0.38), rgba(70, 0, 50, 0.72));
+    radial-gradient(circle at top, rgba(255,255,255,0.14), transparent 30%),
+    linear-gradient(180deg, rgba(45, 0, 32, 0.14), rgba(74, 0, 48, 0.2));
 }
 
 .theme-blush-mist {
   background:
-    radial-gradient(circle at 50% 10%, rgba(255,220,236,0.15), transparent 25%),
-    radial-gradient(circle at 20% 75%, rgba(255,150,205,0.14), transparent 22%),
-    linear-gradient(180deg, rgba(63,0,31,0.30), rgba(74,0,53,0.66));
+    radial-gradient(circle at 50% 10%, rgba(255,215,230,0.18), transparent 26%),
+    radial-gradient(circle at 20% 70%, rgba(255,160,205,0.16), transparent 24%);
 }
 
 .theme-fuchsia-night {
   background:
-    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.10), transparent 14%),
-    radial-gradient(circle at 80% 18%, rgba(255,255,255,0.08), transparent 12%),
-    radial-gradient(circle at bottom, rgba(255,105,180,0.12), transparent 26%),
-    linear-gradient(180deg, rgba(56,0,42,0.34), rgba(42,0,46,0.74));
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.10), transparent 18%),
+    radial-gradient(circle at 82% 14%, rgba(255,255,255,0.08), transparent 14%),
+    radial-gradient(circle at 50% 80%, rgba(255,120,190,0.12), transparent 24%);
 }
 
 .countdown-rain {
   z-index: 2;
   pointer-events: none;
+  opacity: 0.7;
 }
 
 .rain-drop {
   position: absolute;
-  top: -18vh;
+  top: -20vh;
   width: 1px;
+  height: 80px;
   background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.45));
   animation: rainfall linear infinite;
 }
 
 @keyframes rainfall {
   to {
-    transform: translateY(130vh) translateX(-8px);
+    transform: translateY(130vh) translateX(-6px);
   }
 }
 
@@ -152,18 +166,18 @@ button {
 
 .count-particle {
   position: absolute;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.28);
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
   animation: floatParticle linear infinite;
 }
 
 @keyframes floatParticle {
   from {
-    transform: translateY(20px);
+    transform: translateY(30px);
     opacity: 0;
   }
-  15% {
-    opacity: 0.75;
+  20% {
+    opacity: 0.8;
   }
   to {
     transform: translateY(-120vh);
@@ -173,18 +187,23 @@ button {
 
 .countdown-stage,
 .gift-stage {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
+  min-height: 100vh;
   display: grid;
   place-items: center;
   padding: 24px;
+  position: relative;
+  z-index: 4;
 }
 
-.countdown-shell {
+.countdown-center {
+  text-align: center;
   width: min(980px, 94vw);
-  padding: 28px;
-  border-radius: 32px;
+}
+
+.countdown-title {
+  font-size: clamp(34px, 6vw, 72px);
+  font-weight: 900;
+  margin-bottom: 28px;
 }
 
 .countdown-grid {
@@ -194,16 +213,17 @@ button {
 }
 
 .count-card {
-  padding: 20px 14px;
+  padding: 18px 12px;
   border-radius: 26px;
   text-align: center;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.18);
   backdrop-filter: blur(12px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.16);
 }
 
 .count-card .num {
-  font-size: clamp(34px, 5vw, 62px);
+  font-size: clamp(32px, 6vw, 64px);
   font-weight: 800;
 }
 
@@ -216,18 +236,18 @@ button {
 }
 
 .countdown-clue {
+  margin-top: 18px;
   min-height: 18px;
-  margin-top: 16px;
   text-align: center;
   font-size: 12px;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: rgba(255, 235, 245, 0.62);
+  color: rgba(255,255,255,0.5);
 }
 
 /* GIFT */
 .gift-stage {
-  background: transparent;
+  text-align: center;
 }
 
 .gift-aura {
@@ -235,13 +255,13 @@ button {
   width: 320px;
   height: 320px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,180,220,0.42), rgba(255,180,220,0.12), transparent 72%);
-  filter: blur(14px);
-  animation: auraPulse 2.6s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(255,182,216,0.42), rgba(255,182,216,0.08), transparent 70%);
+  filter: blur(18px);
+  animation: glowPulse 2.4s ease-in-out infinite;
 }
 
-@keyframes auraPulse {
-  0%, 100% { transform: scale(1); opacity: 0.85; }
+@keyframes glowPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
   50% { transform: scale(1.12); opacity: 1; }
 }
 
@@ -251,24 +271,21 @@ button {
   width: 320px;
   height: 330px;
   background: transparent;
-  padding: 0;
   border: none;
-  animation: giftFloat 3.1s ease-in-out infinite, giftShake 4.4s ease-in-out infinite;
-}
-
-.gift-trigger:hover {
-  transform: scale(1.02);
+  padding: 0;
+  animation: giftFloat 3.4s ease-in-out infinite, giftShake 4.2s ease-in-out infinite;
+  transform-origin: center bottom;
 }
 
 @keyframes giftFloat {
-  0%, 100% { translate: 0 0; }
-  50% { translate: 0 -10px; }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 @keyframes giftShake {
   0%, 88%, 100% { rotate: 0deg; }
-  90% { rotate: -1.8deg; }
-  92% { rotate: 1.8deg; }
+  90% { rotate: -2deg; }
+  92% { rotate: 2deg; }
   94% { rotate: -1deg; }
   96% { rotate: 1deg; }
 }
@@ -277,6 +294,12 @@ button {
   width: 100%;
   height: 100%;
   overflow: visible;
+}
+
+.gift-text {
+  margin-top: 14px;
+  font-size: 18px;
+  color: #ffe4f0;
 }
 
 .gift-light {
@@ -289,21 +312,6 @@ button {
   transition: transform 0.85s cubic-bezier(0.2, 0.9, 0.2, 1);
 }
 
-.gift-trigger.opening {
-  animation: giftPress 0.22s ease, giftOpenBounce 0.8s ease 0.2s;
-}
-
-@keyframes giftPress {
-  0% { transform: scale(1); }
-  100% { transform: scale(0.97); }
-}
-
-@keyframes giftOpenBounce {
-  0% { transform: scale(0.97); }
-  50% { transform: scale(1.03); }
-  100% { transform: scale(1); }
-}
-
 .gift-trigger.opened .gift-lid-group {
   transform: translate(-22px, -68px) rotate(-18deg);
 }
@@ -312,134 +320,11 @@ button {
   opacity: 1;
 }
 
-.gift-hint {
-  position: absolute;
-  bottom: 90px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: rgba(255, 235, 245, 0.72);
-}
-
-/* WISH */
-.wish-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 250;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  background: rgba(36, 0, 24, 0.36);
-  backdrop-filter: blur(8px);
-}
-
-.wish-overlay.show {
-  display: flex;
-}
-
-.wish-card {
-  position: relative;
-  z-index: 4;
-  width: min(760px, 92vw);
-  text-align: center;
-  padding: 30px;
-  border-radius: 32px;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: var(--shadow);
-  animation: fadeUp 0.35s ease;
-}
-
-.wish-card h2 {
-  font-size: clamp(38px, 6vw, 72px);
-  font-weight: 900;
-}
-
-.wish-card p {
-  margin-top: 12px;
-  color: rgba(255,235,245,0.88);
-  font-size: 18px;
-}
-
-.wish-card .btn-primary {
-  margin-top: 20px;
-}
-
-.confetti-layer,
-.balloon-layer {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.confetti-piece {
-  position: absolute;
-  top: -40px;
-  width: 10px;
-  height: 18px;
-  animation: confettiFall linear forwards;
-}
-
-@keyframes confettiFall {
-  to {
-    transform: translateY(115vh) rotate(720deg);
-  }
-}
-
-.balloon {
-  position: absolute;
-  bottom: -120px;
-  width: 56px;
-  height: 72px;
-  border-radius: 50% 50% 46% 46%;
-  animation: balloonRise linear forwards;
-  box-shadow: inset -8px -10px 14px rgba(0,0,0,0.08);
-}
-
-.balloon::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -55px;
-  width: 2px;
-  height: 56px;
-  background: rgba(255,255,255,0.65);
-}
-
-@keyframes balloonRise {
-  to {
-    transform: translateY(-120vh) translateX(var(--drift));
-  }
-}
-
-.spark-burst {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  pointer-events: none;
-  z-index: 260;
-  transition: transform 1s ease, opacity 1s ease;
-}
-
-/* MAIN PAGE - kept same look */
+/* MAIN PAGE */
 .main-page {
   position: relative;
-  z-index: 1;
-}
-
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border-radius: 999px;
-  padding: 10px 16px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.14);
-  font-size: 14px;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, var(--bg1), var(--bg2), var(--bg3));
 }
 
 .hero {
@@ -447,22 +332,18 @@ button {
   min-height: 100vh;
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 60px 0;
   overflow: hidden;
 }
 
-.hero::before,
-.hero::after {
-  content: "";
+.absolute-overlay {
   position: absolute;
   inset: 0;
-  pointer-events: none;
-}
-
-.hero::before {
   background:
-    radial-gradient(circle at top, rgba(255,255,255,0.12), transparent 35%),
-    radial-gradient(circle at bottom, rgba(255,105,180,0.15), transparent 25%);
+    radial-gradient(circle at top, rgba(255,255,255,0.15), transparent 35%),
+    radial-gradient(circle at bottom, rgba(255,105,180,0.18), transparent 25%);
+  pointer-events: none;
 }
 
 .hero-grid {
@@ -516,10 +397,10 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin-bottom: 28px;
+  margin-bottom: 0;
 }
 
-.hero-card-wrap {
+.hero-right {
   position: relative;
 }
 
@@ -566,13 +447,17 @@ button {
   font-size: 15px;
 }
 
-/* floating hearts */
+/* floating */
 .floating-love {
   position: fixed;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
   z-index: 0;
+}
+
+.countdown-floating {
+  z-index: 3;
 }
 
 .floating-heart {
@@ -597,21 +482,26 @@ button {
   }
 }
 
-/* letter modal */
-.modal {
+/* modals */
+.modal,
+.surprise-overlay {
   position: fixed;
   inset: 0;
-  z-index: 300;
+  z-index: 200;
   display: none;
   align-items: center;
   justify-content: center;
   padding: 16px;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(8px);
 }
 
-.modal.show {
+.modal.show,
+.surprise-overlay.show {
   display: flex;
+}
+
+.modal {
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
 }
 
 .modal-card {
@@ -659,6 +549,56 @@ button {
   font-weight: 700;
 }
 
+.surprise-overlay {
+  z-index: 190;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.surprise-message {
+  position: relative;
+  pointer-events: auto;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(16px);
+  padding: 28px 34px;
+  border-radius: 32px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  animation: fadeUp 0.3s ease;
+}
+
+.surprise-message h2 {
+  font-size: clamp(38px, 6vw, 72px);
+  font-weight: 900;
+}
+
+.surprise-message p {
+  margin-top: 12px;
+  color: rgba(255,235,245,0.88);
+  font-size: 18px;
+}
+
+.mt-5 {
+  margin-top: 20px;
+}
+
+.burst-item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-size: 26px;
+  opacity: 1;
+  animation: burstOut 1.8s ease-out forwards;
+}
+
+@keyframes burstOut {
+  to {
+    transform: translate(var(--x), var(--y)) scale(1.4) rotate(var(--r));
+    opacity: 0;
+  }
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -668,6 +608,20 @@ button {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
+}
+
+.fade-up,
+.fade-scale {
+  animation: fadeUp 0.8s ease both;
+}
+
+.fade-scale {
+  animation-name: fadeScale;
+}
+
+@keyframes fadeScale {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 @media (max-width: 1024px) {
@@ -699,20 +653,13 @@ button {
     font-size: 28px;
   }
 
-  .countdown-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .countdown-shell {
-    padding: 18px;
-  }
-
   .gift-trigger {
     width: 260px;
     height: 270px;
   }
 
-  .gift-hint {
-    bottom: 70px;
+  .btn-row {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
