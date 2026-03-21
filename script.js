@@ -7,7 +7,7 @@ const CONFIG = {
 
 const photos = [
   {
-    src: "img1.png",
+    src: "tharusi/img1.png",
     caption: "Replace this with your favorite photo together 💕",
   },
   {
