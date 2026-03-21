@@ -1,5 +1,5 @@
 const CONFIG = {
-  testMode: true,          // true = 30 seconds, false = real target date
+  testMode: true,
   testSeconds: 30,
   realTargetDate: "2026-06-17T00:00:00",
   showClues: true
@@ -17,7 +17,7 @@ const photos = [
   {
     src: "images/img3.png",
     caption: "Her cutest moment ever 🌸",
-  }
+  },
 ];
 
 const messages = [
@@ -30,41 +30,42 @@ const messages = [
 const clues = [
   "",
   "NOT YET",
+  "SOMETHING IS WAITING",
   "ALMOST TIME",
-  "SOMETHING BEAUTIFUL IS WAITING",
-  "JUST A LITTLE LONGER",
-  "KEEP WATCHING",
+  "JUST A LITTLE MORE",
   "SOON",
-  "DON'T OPEN TOO EARLY"
+  "KEEP WATCHING"
 ];
 
 const countdownThemes = [
   { name: "theme-romantic-pink", rain: false, particles: 18 },
   { name: "theme-rainy-rose", rain: true, particles: 12 },
   { name: "theme-blush-mist", rain: false, particles: 20 },
-  { name: "theme-fuchsia-night", rain: false, particles: 26 }
+  { name: "theme-fuchsia-night", rain: false, particles: 28 },
 ];
 
 const targetDate = CONFIG.testMode
   ? new Date(Date.now() + CONFIG.testSeconds * 1000)
   : new Date(CONFIG.realTargetDate);
 
-/* elements */
+let currentPhoto = 0;
+let mainPhotoInterval = null;
+let countdownDone = false;
+let giftOpened = false;
+
+const mainPage = document.getElementById("mainPage");
 const preReveal = document.getElementById("preReveal");
 const countdownStage = document.getElementById("countdownStage");
 const giftStage = document.getElementById("giftStage");
 const giftTrigger = document.getElementById("giftTrigger");
-const wishOverlay = document.getElementById("wishOverlay");
-const enterMainPageBtn = document.getElementById("enterMainPageBtn");
-const mainPage = document.getElementById("mainPage");
+const surpriseOverlay = document.getElementById("surpriseOverlay");
+const closeSurpriseBtn = document.getElementById("closeSurpriseBtn");
+const openSurpriseBtn = document.getElementById("openSurpriseBtn");
 const countdownClue = document.getElementById("countdownClue");
-
 const countdownThemeOverlay = document.getElementById("countdownThemeOverlay");
 const countdownRain = document.getElementById("countdownRain");
 const countdownParticles = document.getElementById("countdownParticles");
-
-const confettiLayer = document.getElementById("confettiLayer");
-const balloonLayer = document.getElementById("balloonLayer");
+const countdownFloatingLove = document.getElementById("countdownFloatingLove");
 
 const mainPhoto = document.getElementById("mainPhoto");
 const mainCaption = document.getElementById("mainCaption");
@@ -75,14 +76,6 @@ const letterModal = document.getElementById("letterModal");
 const openLetterBtn = document.getElementById("openLetterBtn");
 const closeLetterBtn = document.getElementById("closeLetterBtn");
 
-let currentPhoto = 0;
-let photoInterval = null;
-let countdownFinished = false;
-let giftOpened = false;
-let countdownSlides = [];
-let countdownSlideIndex = 0;
-
-/* main photo slideshow */
 function renderMainPhoto() {
   mainPhoto.style.opacity = "0.4";
   mainPhoto.style.transform = "scale(1.06)";
@@ -103,10 +96,22 @@ function nextPhoto() {
 }
 
 function startPhotoAutoSlide() {
-  photoInterval = setInterval(nextPhoto, 4000);
+  mainPhotoInterval = setInterval(nextPhoto, 4000);
 }
 
-/* typewriter */
+function createFloatingHearts(targetEl) {
+  for (let i = 0; i < 18; i++) {
+    const heart = document.createElement("div");
+    heart.className = "floating-heart";
+    heart.textContent = "💖";
+    heart.style.left = Math.random() * 100 + "%";
+    heart.style.fontSize = 12 + Math.random() * 18 + "px";
+    heart.style.animationDuration = 8 + Math.random() * 10 + "s";
+    heart.style.animationDelay = Math.random() * 8 + "s";
+    targetEl.appendChild(heart);
+  }
+}
+
 function startTypewriter(texts) {
   let index = 0;
   let subIndex = 0;
@@ -137,22 +142,6 @@ function startTypewriter(texts) {
   tick();
 }
 
-/* floating hearts */
-function createFloatingHearts() {
-  for (let i = 0; i < 18; i++) {
-    const heart = document.createElement("div");
-    heart.className = "floating-heart";
-    heart.textContent = "💖";
-    heart.style.left = Math.random() * 100 + "%";
-    heart.style.fontSize = 12 + Math.random() * 18 + "px";
-    heart.style.animationDuration = 8 + Math.random() * 10 + "s";
-    heart.style.animationDelay = Math.random() * 8 + "s";
-    floatingLove.appendChild(heart);
-  }
-}
-
-
-/* countdown theme */
 function pickCountdownTheme() {
   const randomTheme = countdownThemes[Math.floor(Math.random() * countdownThemes.length)];
   countdownThemeOverlay.className = `countdown-theme-overlay ${randomTheme.name}`;
@@ -163,7 +152,7 @@ function pickCountdownTheme() {
       const drop = document.createElement("div");
       drop.className = "rain-drop";
       drop.style.left = `${Math.random() * 100}%`;
-      drop.style.opacity = `${0.2 + Math.random() * 0.4}`;
+      drop.style.opacity = (0.25 + Math.random() * 0.35).toFixed(2);
       drop.style.height = `${40 + Math.random() * 70}px`;
       drop.style.animationDuration = `${0.6 + Math.random() * 0.55}s`;
       drop.style.animationDelay = `${Math.random() * 2}s`;
@@ -180,33 +169,31 @@ function pickCountdownTheme() {
     dot.style.height = `${size}px`;
     dot.style.left = `${Math.random() * 100}%`;
     dot.style.bottom = `${Math.random() * 20}%`;
-    dot.style.animationDuration = `${8 + Math.random() * 10}s`;
+    dot.style.animationDuration = `${8 + Math.random() * 12}s`;
     dot.style.animationDelay = `${Math.random() * 4}s`;
     countdownParticles.appendChild(dot);
   }
 }
 
-/* clues */
 function updateClue() {
   countdownClue.textContent = CONFIG.showClues
     ? clues[Math.floor(Math.random() * clues.length)]
     : "";
 }
 
-/* countdown logic */
 function updateCountdown() {
-  if (countdownFinished) return;
+  if (countdownDone) return;
 
   const now = new Date();
   const diff = targetDate.getTime() - now.getTime();
 
   if (diff <= 0) {
+    countdownDone = true;
     document.getElementById("days").textContent = "000";
     document.getElementById("hours").textContent = "00";
     document.getElementById("minutes").textContent = "00";
     document.getElementById("seconds").textContent = "00";
-    countdownFinished = true;
-    showGiftStage();
+    showGiftReveal();
     return;
   }
 
@@ -221,104 +208,47 @@ function updateCountdown() {
   document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
 }
 
-function showGiftStage() {
+function showGiftReveal() {
   countdownStage.classList.add("hidden");
   giftStage.classList.remove("hidden");
 }
 
-/* effects */
-function createSparkBurst() {
-  const burstCount = 26;
+function launchSurprise() {
+  surpriseOverlay.classList.add("show");
 
-  for (let i = 0; i < burstCount; i++) {
-    const spark = document.createElement("div");
-    spark.className = "spark-burst";
-    spark.textContent = i % 2 === 0 ? "✨" : "💖";
-    spark.style.fontSize = `${20 + Math.random() * 18}px`;
-    spark.style.opacity = "1";
-    document.body.appendChild(spark);
+  for (let i = 0; i < 80; i++) {
+    const burst = document.createElement("div");
+    burst.className = "burst-item";
+    burst.textContent = i % 2 === 0 ? "💖" : "✨";
+    burst.style.setProperty("--x", ((Math.random() - 0.5) * 1200) + "px");
+    burst.style.setProperty("--y", ((Math.random() - 0.5) * 900) + "px");
+    burst.style.setProperty("--r", (Math.random() * 240) + "deg");
+    surpriseOverlay.appendChild(burst);
 
-    const x = (Math.random() - 0.5) * 700;
-    const y = (Math.random() - 0.5) * 500;
-
-    requestAnimationFrame(() => {
-      spark.style.transform = `translate(${x}px, ${y}px) scale(1.4) rotate(${Math.random() * 260}deg)`;
-      spark.style.opacity = "0";
-    });
-
-    setTimeout(() => spark.remove(), 1100);
+    setTimeout(() => burst.remove(), 1800);
   }
 }
 
-function createConfetti() {
-  confettiLayer.innerHTML = "";
-  const colors = ["#ffd6ea", "#fff2b2", "#ffffff", "#ff8dc2", "#f6d6ff"];
-
-  for (let i = 0; i < 120; i++) {
-    const piece = document.createElement("div");
-    piece.className = "confetti-piece";
-    piece.style.left = `${Math.random() * 100}%`;
-    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-    piece.style.animationDuration = `${3 + Math.random() * 2.5}s`;
-    piece.style.animationDelay = `${Math.random() * 0.8}s`;
-    piece.style.transform = `rotate(${Math.random() * 360}deg)`;
-    confettiLayer.appendChild(piece);
-  }
-}
-
-function createBalloons() {
-  balloonLayer.innerHTML = "";
-  const colors = [
-    "linear-gradient(180deg, #ffd2e7, #ff8fbe)",
-    "linear-gradient(180deg, #fff7c8, #ffd778)",
-    "linear-gradient(180deg, #ffffff, #f3d9e6)",
-    "linear-gradient(180deg, #f4ddff, #dda2ff)"
-  ];
-
-  for (let i = 0; i < 16; i++) {
-    const balloon = document.createElement("div");
-    balloon.className = "balloon";
-    balloon.style.left = `${Math.random() * 100}%`;
-    balloon.style.background = colors[Math.floor(Math.random() * colors.length)];
-    balloon.style.animationDuration = `${7 + Math.random() * 5}s`;
-    balloon.style.animationDelay = `${Math.random() * 1.2}s`;
-    balloon.style.setProperty("--drift", `${-40 + Math.random() * 80}px`);
-    balloonLayer.appendChild(balloon);
-  }
-}
-
-/* gift */
 function openGiftAnimation() {
   if (giftOpened) return;
   giftOpened = true;
 
-  giftTrigger.classList.add("opening");
+  giftTrigger.classList.add("opened");
 
   setTimeout(() => {
-    giftTrigger.classList.add("opened");
-    createSparkBurst();
-  }, 180);
-
-  setTimeout(() => {
-    wishOverlay.classList.add("show");
-    createConfetti();
-    createBalloons();
-  }, 950);
+    launchSurprise();
+  }, 850);
 }
 
-/* reveal main page */
-function enterMainPage() {
-  wishOverlay.classList.remove("show");
+function revealMainPage() {
   preReveal.classList.add("hidden");
   mainPage.classList.remove("hidden");
-
   renderMainPhoto();
-  startPhotoAutoSlide();
+  createFloatingHearts(floatingLove);
   startTypewriter(messages);
-  createFloatingHearts();
+  startPhotoAutoSlide();
 }
 
-/* love letter */
 openLetterBtn.addEventListener("click", () => {
   letterModal.classList.add("show");
 });
@@ -333,15 +263,24 @@ letterModal.addEventListener("click", (e) => {
   }
 });
 
-/* events */
 giftTrigger.addEventListener("click", openGiftAnimation);
-enterMainPageBtn.addEventListener("click", enterMainPage);
 
-/* init */
+closeSurpriseBtn.addEventListener("click", () => {
+  const mainHidden = mainPage.classList.contains("hidden");
+  surpriseOverlay.classList.remove("show");
+  if (mainHidden) {
+    revealMainPage();
+  }
+});
 
+openSurpriseBtn.addEventListener("click", () => {
+  launchSurprise();
+});
+
+createFloatingHearts(countdownFloatingLove);
 pickCountdownTheme();
-updateClue();
 updateCountdown();
+updateClue();
 
 setInterval(updateCountdown, 1000);
 setInterval(updateClue, 7000);
