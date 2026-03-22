@@ -1,6 +1,6 @@
 const CONFIG = {
-  testMode: false,
-  testSeconds: 30,
+  testMode: true,
+  testSeconds: 10,
   realTargetDate: "2026-06-17T00:00:00",
   showClues: true
 };
@@ -8,15 +8,15 @@ const CONFIG = {
 const photos = [
   {
     src: "img1.png",
-    caption: "Replace this with your favorite photo together 💕",
+    caption: "The moment I realized how lucky I am to have you 💖",
   },
   {
     src: "img2.png",
-    caption: "A memory that still makes you smile ✨",
+    caption: "A memory with you that I’ll cherish forever ✨",
   },
   {
     src: "img3.png",
-    caption: "Her cutest moment ever 🌸",
+    caption: "Her smile… my favorite view in the world 🌸",
   },
 ];
 
