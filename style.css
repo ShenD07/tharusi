@@ -193,11 +193,14 @@ button {
   padding: 24px;
   position: relative;
   z-index: 4;
+  width: 100%;
+  text-align: center;
 }
 
 .countdown-center {
   text-align: center;
   width: min(980px, 94vw);
+  margin: 0 auto;
 }
 
 .countdown-title {
@@ -210,9 +213,12 @@ button {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 14px;
+  justify-items: center;
 }
 
 .count-card {
+  width: 100%;
+  min-width: 0;
   padding: 18px 12px;
   border-radius: 26px;
   text-align: center;
@@ -633,6 +639,8 @@ button {
 @media (max-width: 900px) {
   .countdown-grid {
     grid-template-columns: repeat(2, 1fr);
+    max-width: 340px;
+    margin: 0 auto;
   }
 }
 
