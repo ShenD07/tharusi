@@ -325,7 +325,6 @@ setInterval(updateClue, 7000);
     "So lucky it's you 🍀",
     "Pure happiness 🎉",
     "My everything 🌍",
-    "Happy Birthday 👑",
     "Heart smiles for you 💓",
     "You = joy 🌸",
   ];
@@ -334,7 +333,7 @@ setInterval(updateClue, 7000);
 
   let active = false, score = 0, missed = 0, level = 1;
   let timers = [], gameTimerID = null;
-  const GAME_TIME = 30, MAX_MISS = 5;
+  const GAME_TIME = 600, MAX_MISS = 5;
 
   const arena    = document.getElementById("bArena");
   const scoreEl  = document.getElementById("bScore");
