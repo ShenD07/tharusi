@@ -1,5 +1,5 @@
 const CONFIG = {
-  testMode: false,
+  testMode: true,
   testSeconds: 10,
   realTargetDate: "2026-06-17T00:00:00",
   showClues: true
@@ -284,3 +284,183 @@ updateClue();
 
 setInterval(updateCountdown, 1000);
 setInterval(updateClue, 7000);
+
+/* ════════════════════════════════
+   BORED BUTTON + GAME PANEL
+════════════════════════════════ */
+(function () {
+  const boredBtn    = document.getElementById("boredBtn");
+  const gamePanel   = document.getElementById("gamePanel");
+  const gameCloseBtn= document.getElementById("gameCloseBtn");
+
+  // open panel
+  boredBtn.addEventListener("click", () => {
+    gamePanel.classList.add("open");
+    // reset game UI when opening
+    resetGameUI();
+  });
+
+  // close panel — stop game if running
+  gameCloseBtn.addEventListener("click", () => {
+    gamePanel.classList.remove("open");
+    stopGame();
+  });
+
+  // close on backdrop click
+  gamePanel.addEventListener("click", (e) => {
+    if (e.target === gamePanel) {
+      gamePanel.classList.remove("open");
+      stopGame();
+    }
+  });
+
+  /* ── GAME LOGIC ── */
+  const LOVE_NOTES = [
+    "You are my sunshine ☀️",
+    "I love your smile 😊",
+    "My favourite person 💖",
+    "My heart is yours 💝",
+    "You are magic ✨",
+    "Forever yours 💕",
+    "So lucky it's you 🍀",
+    "Pure happiness 🎉",
+    "My everything 🌍",
+    "Happy Birthday 👑",
+    "Heart smiles for you 💓",
+    "You = joy 🌸",
+  ];
+
+  const BALLOONS = ["🎈", "🎀", "💗", "🌸", "💝", "🎊", "🌺", "💖"];
+
+  let active = false, score = 0, missed = 0, level = 1;
+  let timers = [], gameTimerID = null;
+  const GAME_TIME = 30, MAX_MISS = 5;
+
+  const arena    = document.getElementById("bArena");
+  const scoreEl  = document.getElementById("bScore");
+  const missEl   = document.getElementById("bMissed");
+  const levelEl  = document.getElementById("bLevel");
+  const overEl   = document.getElementById("bGameover");
+  const startBtn = document.getElementById("bStartBtn");
+
+  startBtn.addEventListener("click", startGame);
+
+  function resetGameUI() {
+    scoreEl.textContent = 0;
+    missEl.textContent  = "0 / 5";
+    levelEl.textContent = 1;
+    overEl.textContent  = "";
+    startBtn.textContent    = "🎈 Start Game";
+    startBtn.style.display  = "inline-block";
+    arena.innerHTML = "";
+  }
+
+  function stopGame() {
+    active = false;
+    clearTimeout(gameTimerID);
+    timers.forEach(clearTimeout);
+    timers = [];
+    arena.innerHTML = "";
+  }
+
+  function startGame() {
+    stopGame();
+    active = true; score = 0; missed = 0; level = 1;
+    scoreEl.textContent = 0;
+    missEl.textContent  = "0 / 5";
+    levelEl.textContent = 1;
+    overEl.textContent  = "";
+    startBtn.style.display = "none";
+
+    gameTimerID = setTimeout(endGame, GAME_TIME * 1000);
+    spawnWave();
+  }
+
+  function spawnWave() {
+    if (!active) return;
+    const count = 2 + level;
+    for (let i = 0; i < count; i++) {
+      timers.push(setTimeout(spawnBalloon, i * Math.max(120, 550 - level * 35)));
+    }
+    timers.push(setTimeout(spawnWave, Math.max(1600, 3000 - level * 180)));
+  }
+
+  function spawnBalloon() {
+    if (!active) return;
+    const b        = document.createElement("div");
+    b.className    = "b-balloon";
+    const emoji    = BALLOONS[Math.floor(Math.random() * BALLOONS.length)];
+    const duration = Math.max(1.6, 4.2 - level * 0.28);
+    const left     = 4 + Math.random() * 82;
+    const note     = LOVE_NOTES[Math.floor(Math.random() * LOVE_NOTES.length)];
+
+    b.style.left = left + "%";
+    b.style.animationDuration = duration + "s";
+    b.innerHTML = `<div class="b-body">${emoji}</div><div class="b-string"></div>`;
+
+    const pop = () => { if (b.parentNode && active) doPop(b, note); };
+    b.addEventListener("click", pop);
+    b.addEventListener("touchstart", e => { e.preventDefault(); pop(); }, { passive: false });
+    arena.appendChild(b);
+
+    const missID = setTimeout(() => {
+      if (!b.parentNode || !active) return;
+      b.remove();
+      missed++;
+      missEl.textContent = missed + " / 5";
+      arena.classList.add("b-arena-flash");
+      setTimeout(() => arena.classList.remove("b-arena-flash"), 280);
+      if (missed >= MAX_MISS) endGame();
+    }, duration * 1000 + 50);
+
+    timers.push(missID);
+  }
+
+  function doPop(b, note) {
+    const rect  = arena.getBoundingClientRect();
+    const bRect = b.getBoundingClientRect();
+    const x = bRect.left - rect.left + bRect.width / 2;
+    const y = bRect.top  - rect.top  + bRect.height / 2;
+    b.remove();
+
+    score++;
+    scoreEl.textContent = score;
+    level = 1 + Math.floor(score / 10);
+    levelEl.textContent = level;
+
+    const burst = document.createElement("div");
+    burst.className = "b-pop-burst";
+    burst.textContent = "💥";
+    burst.style.left = (x - 20) + "px";
+    burst.style.top  = (y - 20) + "px";
+    arena.appendChild(burst);
+    setTimeout(() => burst.remove(), 560);
+
+    const np = document.createElement("div");
+    np.className = "b-note-pop";
+    np.textContent = note;
+    np.style.left = Math.max(4, Math.min(x - 60, arena.offsetWidth - 145)) + "px";
+    np.style.top  = (y - 10) + "px";
+    arena.appendChild(np);
+    setTimeout(() => np.remove(), 1000);
+  }
+
+  function endGame() {
+    active = false;
+    clearTimeout(gameTimerID);
+    timers.forEach(clearTimeout);
+    timers = [];
+    arena.innerHTML = "";
+
+    let msg;
+    if (score >= 30)      msg = `🏆 ${score} pts — Incredible Sudu! 🏆`;
+    else if (score >= 15) msg = `🌟 ${score} pts — Amazing! 🌟`;
+    else if (score >= 5)  msg = `💕 ${score} pts — Nice try! 💕`;
+    else                  msg = `🥰 ${score} pts — You're adorable anyway! 🥰`;
+
+    overEl.textContent      = msg;
+    startBtn.textContent    = "🎈 Play Again";
+    startBtn.style.display  = "inline-block";
+  }
+})();
+
