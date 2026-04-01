@@ -1,5 +1,5 @@
 const CONFIG = {
-  testMode: true,
+  testMode: false,
   testSeconds: 10,
   realTargetDate: "2026-06-17T00:00:00",
   showClues: true
