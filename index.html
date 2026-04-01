@@ -36,6 +36,29 @@
           </div>
         </div>
         <div class="countdown-clue" id="countdownClue"></div>
+
+        <!-- BORED BUTTON -->
+        <button class="bored-btn" id="boredBtn">😴 Boring… let's play a game!</button>
+
+      </div>
+    </div>
+
+    <!-- GAME PANEL OVERLAY -->
+    <div class="game-panel" id="gamePanel">
+      <div class="game-panel-inner">
+        <div class="game-panel-header">
+          <span class="game-panel-title">🎈 Pop the Balloons!</span>
+          <button class="game-close-btn" id="gameCloseBtn">✕ Back to Countdown</button>
+        </div>
+        <p class="game-panel-sub">Each balloon hides a little love note 💕</p>
+        <div class="b-hud">
+          <div class="b-hud-box"><div class="b-hud-label">SCORE</div><div class="b-hud-val" id="bScore">0</div></div>
+          <div class="b-hud-box"><div class="b-hud-label">MISSED</div><div class="b-hud-val" id="bMissed">0 / 5</div></div>
+          <div class="b-hud-box"><div class="b-hud-label">LEVEL</div><div class="b-hud-val" id="bLevel">1</div></div>
+        </div>
+        <div class="b-arena" id="bArena"></div>
+        <div class="b-gameover" id="bGameover"></div>
+        <button class="b-start-btn" id="bStartBtn">🎈 Start Game</button>
       </div>
     </div>
 
@@ -95,7 +118,7 @@
         </svg>
       </button>
 
-      
+      <p class="gift-text">Tap to open your surprise 🎁</p>
     </div>
   </div>
 
