@@ -1,30 +1,21 @@
 const CONFIG = {
-  testMode: false,
+  testMode: true,
   testSeconds: 10,
   realTargetDate: "2026-06-17T00:00:00",
   showClues: true
 };
 
 const photos = [
-  {
-    src: "img1.png",
-    caption: "The moment I realized how lucky I am to have you 💖",
-  },
-  {
-    src: "img2.png",
-    caption: "A memory with you that I’ll cherish forever ✨",
-  },
-  {
-    src: "img3.png",
-    caption: "Her smile… my favorite view in the world 🌸",
-  },
+  { src: "img1.png", caption: "The moment I realized how lucky I am to have you 💖" },
+  { src: "img2.png", caption: "A memory with you that I’ll cherish forever ✨" },
+  { src: "img3.png", caption: "Her smile… my favorite view in the world 🌸" }
 ];
 
 const messages = [
   "Happy Birthday, my love. You make my world softer, brighter, and more beautiful every single day.",
   "Every memory with you feels like my favorite song on repeat.",
   "Your smile is my peace, your laugh is my happiness, and your love is my biggest blessing.",
-  "No matter how many birthdays come and go, I will always choose you, celebrate you, and love you more each day.",
+  "No matter how many birthdays come and go, I will always choose you, celebrate you, and love you more each day."
 ];
 
 const clues = [
@@ -41,7 +32,7 @@ const countdownThemes = [
   { name: "theme-romantic-pink", rain: false, particles: 18 },
   { name: "theme-rainy-rose", rain: true, particles: 12 },
   { name: "theme-blush-mist", rain: false, particles: 20 },
-  { name: "theme-fuchsia-night", rain: false, particles: 28 },
+  { name: "theme-fuchsia-night", rain: false, particles: 28 }
 ];
 
 const targetDate = CONFIG.testMode
@@ -66,12 +57,10 @@ const countdownThemeOverlay = document.getElementById("countdownThemeOverlay");
 const countdownRain = document.getElementById("countdownRain");
 const countdownParticles = document.getElementById("countdownParticles");
 const countdownFloatingLove = document.getElementById("countdownFloatingLove");
-
 const mainPhoto = document.getElementById("mainPhoto");
 const mainCaption = document.getElementById("mainCaption");
 const typewriter = document.getElementById("typewriter");
 const floatingLove = document.getElementById("floatingLove");
-
 const letterModal = document.getElementById("letterModal");
 const openLetterBtn = document.getElementById("openLetterBtn");
 const closeLetterBtn = document.getElementById("closeLetterBtn");
@@ -96,6 +85,7 @@ function nextPhoto() {
 }
 
 function startPhotoAutoSlide() {
+  if (mainPhotoInterval) clearInterval(mainPhotoInterval);
   mainPhotoInterval = setInterval(nextPhoto, 4000);
 }
 
@@ -232,12 +222,8 @@ function launchSurprise() {
 function openGiftAnimation() {
   if (giftOpened) return;
   giftOpened = true;
-
   giftTrigger.classList.add("opened");
-
-  setTimeout(() => {
-    launchSurprise();
-  }, 850);
+  setTimeout(launchSurprise, 850);
 }
 
 function revealMainPage() {
@@ -249,217 +235,350 @@ function revealMainPage() {
   startPhotoAutoSlide();
 }
 
-openLetterBtn.addEventListener("click", () => {
-  letterModal.classList.add("show");
-});
-
-closeLetterBtn.addEventListener("click", () => {
-  letterModal.classList.remove("show");
-});
-
+openLetterBtn.addEventListener("click", () => letterModal.classList.add("show"));
+closeLetterBtn.addEventListener("click", () => letterModal.classList.remove("show"));
 letterModal.addEventListener("click", (e) => {
-  if (e.target === letterModal) {
-    letterModal.classList.remove("show");
-  }
+  if (e.target === letterModal) letterModal.classList.remove("show");
 });
-
 giftTrigger.addEventListener("click", openGiftAnimation);
-
 closeSurpriseBtn.addEventListener("click", () => {
   const mainHidden = mainPage.classList.contains("hidden");
   surpriseOverlay.classList.remove("show");
-  if (mainHidden) {
-    revealMainPage();
-  }
+  if (mainHidden) revealMainPage();
 });
-
-openSurpriseBtn.addEventListener("click", () => {
-  launchSurprise();
-});
+openSurpriseBtn.addEventListener("click", launchSurprise);
 
 createFloatingHearts(countdownFloatingLove);
 pickCountdownTheme();
 updateCountdown();
 updateClue();
-
 setInterval(updateCountdown, 1000);
 setInterval(updateClue, 7000);
 
 /* ════════════════════════════════
-   BORED BUTTON + GAME PANEL
+   GAME HUB
 ════════════════════════════════ */
 (function () {
-  const boredBtn    = document.getElementById("boredBtn");
-  const gamePanel   = document.getElementById("gamePanel");
-  const gameCloseBtn= document.getElementById("gameCloseBtn");
+  const boredBtn = document.getElementById("boredBtn");
+  const gamePanel = document.getElementById("gamePanel");
+  const gameCloseBtn = document.getElementById("gameCloseBtn");
+  const gamePicker = document.getElementById("gamePicker");
+  const gamePanelTitle = document.getElementById("gamePanelTitle");
 
-  // open panel
+  const screens = {
+    balloon: document.getElementById("gameBaloon"),
+    memory: document.getElementById("gameMemory")
+  };
+
   boredBtn.addEventListener("click", () => {
     gamePanel.classList.add("open");
-    // reset game UI when opening
-    resetGameUI();
+    showPicker();
   });
 
-  // close panel — stop game if running
-  gameCloseBtn.addEventListener("click", () => {
-    gamePanel.classList.remove("open");
-    stopGame();
-  });
-
-  // close on backdrop click
+  gameCloseBtn.addEventListener("click", closePanel);
   gamePanel.addEventListener("click", (e) => {
-    if (e.target === gamePanel) {
-      gamePanel.classList.remove("open");
-      stopGame();
+    if (e.target === gamePanel) closePanel();
+  });
+
+  function closePanel() {
+    gamePanel.classList.remove("open");
+    stopAllGames();
+    showPicker();
+  }
+
+  function hideAllScreens() {
+    Object.values(screens).forEach(el => el.classList.add("hidden"));
+  }
+
+  function showPicker() {
+    gamePicker.classList.remove("hidden");
+    hideAllScreens();
+    gamePanelTitle.textContent = "🎮 Game Room";
+  }
+
+  function showGame(key, title) {
+    gamePicker.classList.add("hidden");
+    hideAllScreens();
+    screens[key].classList.remove("hidden");
+    gamePanelTitle.textContent = title;
+  }
+
+  function stopAllGames() {
+    stopBalloon();
+    stopMemory();
+  }
+
+  document.querySelectorAll(".game-pick-card[data-game]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const g = btn.dataset.game;
+      if (g === "balloon") {
+        showGame("balloon", "🎈 Pop Balloons");
+        resetBalloon();
+      }
+      if (g === "memory") {
+        showGame("memory", "🧩 Memory Match");
+        resetMemory();
+      }
+    });
+  });
+
+  ["backFromBalloon", "backFromMemory"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("click", () => {
+        stopAllGames();
+        showPicker();
+      });
     }
   });
 
-  /* ── GAME LOGIC ── */
+  /* ════════════════════════
+     GAME 1 — BALLOON POP
+  ════════════════════════ */
   const LOVE_NOTES = [
-    "You are my sunshine ☀️",
-    "I love your smile 😊",
-    "My favourite person 💖",
-    "My heart is yours 💝",
-    "You are magic ✨",
-    "Forever yours 💕",
-    "So lucky it's you 🍀",
-    "Pure happiness 🎉",
-    "My everything 🌍",
-    "Heart smiles for you 💓",
-    "You = joy 🌸",
+    "You are my sunshine ☀️", "I love your smile 😊", "My favourite person 💖",
+    "My heart is yours 💝", "You are magic ✨", "Forever yours 💕", "So lucky it's you 🍀",
+    "Pure happiness 🎉", "My everything 🌍", "Heart smiles for you 💓", "You = joy 🌸"
   ];
-
   const BALLOONS = ["🎈", "🎀", "💗", "🌸", "💝", "🎊", "🌺", "💖"];
 
-  let active = false, score = 0, missed = 0, level = 1;
-  let timers = [], gameTimerID = null;
-  const GAME_TIME = 600, MAX_MISS = 5;
+  let bActive = false, bScore = 0, bMissed = 0, bLevel = 1, bTimers = [], bGameTimer = null;
+  const BTIME = 600, BMISS = 5;
 
-  const arena    = document.getElementById("bArena");
-  const scoreEl  = document.getElementById("bScore");
-  const missEl   = document.getElementById("bMissed");
-  const levelEl  = document.getElementById("bLevel");
-  const overEl   = document.getElementById("bGameover");
-  const startBtn = document.getElementById("bStartBtn");
+  const bArena = document.getElementById("bArena");
+  const bScoreEl = document.getElementById("bScore");
+  const bMissEl = document.getElementById("bMissed");
+  const bLevelEl = document.getElementById("bLevel");
+  const bOverEl = document.getElementById("bGameover");
+  const bStartBtn = document.getElementById("bStartBtn");
 
-  startBtn.addEventListener("click", startGame);
+  bStartBtn.addEventListener("click", startBalloon);
 
-  function resetGameUI() {
-    scoreEl.textContent = 0;
-    missEl.textContent  = "0 / 5";
-    levelEl.textContent = 1;
-    overEl.textContent  = "";
-    startBtn.textContent    = "🎈 Start Game";
-    startBtn.style.display  = "inline-block";
-    arena.innerHTML = "";
+  function resetBalloon() {
+    stopBalloon();
+    bScoreEl.textContent = "0";
+    bMissEl.textContent = "0 / 5";
+    bLevelEl.textContent = "1";
+    bOverEl.textContent = "";
+    bStartBtn.textContent = "🎈 Start Game";
+    bStartBtn.classList.remove("hidden");
+    bArena.innerHTML = "";
   }
 
-  function stopGame() {
-    active = false;
-    clearTimeout(gameTimerID);
-    timers.forEach(clearTimeout);
-    timers = [];
-    arena.innerHTML = "";
+  function stopBalloon() {
+    bActive = false;
+    clearTimeout(bGameTimer);
+    bTimers.forEach(clearTimeout);
+    bTimers = [];
+    bArena.innerHTML = "";
   }
 
-  function startGame() {
-    stopGame();
-    active = true; score = 0; missed = 0; level = 1;
-    scoreEl.textContent = 0;
-    missEl.textContent  = "0 / 5";
-    levelEl.textContent = 1;
-    overEl.textContent  = "";
-    startBtn.style.display = "none";
-
-    gameTimerID = setTimeout(endGame, GAME_TIME * 1000);
-    spawnWave();
+  function startBalloon() {
+    stopBalloon();
+    bActive = true;
+    bScore = 0;
+    bMissed = 0;
+    bLevel = 1;
+    bScoreEl.textContent = 0;
+    bMissEl.textContent = "0 / 5";
+    bLevelEl.textContent = 1;
+    bOverEl.textContent = "";
+    bStartBtn.classList.add("hidden");
+    bGameTimer = setTimeout(endBalloon, BTIME * 1000);
+    bSpawnWave();
   }
 
-  function spawnWave() {
-    if (!active) return;
-    const count = 2 + level;
-    for (let i = 0; i < count; i++) {
-      timers.push(setTimeout(spawnBalloon, i * Math.max(120, 550 - level * 35)));
+  function bSpawnWave() {
+    if (!bActive) return;
+    for (let i = 0; i < 2 + bLevel; i++) {
+      bTimers.push(setTimeout(bSpawn, i * Math.max(120, 550 - bLevel * 35)));
     }
-    timers.push(setTimeout(spawnWave, Math.max(1600, 3000 - level * 180)));
+    bTimers.push(setTimeout(bSpawnWave, Math.max(1600, 3000 - bLevel * 180)));
   }
 
-  function spawnBalloon() {
-    if (!active) return;
-    const b        = document.createElement("div");
-    b.className    = "b-balloon";
-    const emoji    = BALLOONS[Math.floor(Math.random() * BALLOONS.length)];
-    const duration = Math.max(1.6, 4.2 - level * 0.28);
-    const left     = 4 + Math.random() * 82;
-    const note     = LOVE_NOTES[Math.floor(Math.random() * LOVE_NOTES.length)];
-
-    b.style.left = left + "%";
-    b.style.animationDuration = duration + "s";
+  function bSpawn() {
+    if (!bActive) return;
+    const b = document.createElement("div");
+    b.className = "b-balloon";
+    const emoji = BALLOONS[Math.floor(Math.random() * BALLOONS.length)];
+    const dur = Math.max(1.6, 4.2 - bLevel * 0.28);
+    const note = LOVE_NOTES[Math.floor(Math.random() * LOVE_NOTES.length)];
+    b.style.left = (4 + Math.random() * 82) + "%";
+    b.style.animationDuration = dur + "s";
     b.innerHTML = `<div class="b-body">${emoji}</div><div class="b-string"></div>`;
-
-    const pop = () => { if (b.parentNode && active) doPop(b, note); };
+    const pop = () => { if (b.parentNode && bActive) bPop(b, note); };
     b.addEventListener("click", pop);
     b.addEventListener("touchstart", e => { e.preventDefault(); pop(); }, { passive: false });
-    arena.appendChild(b);
-
-    const missID = setTimeout(() => {
-      if (!b.parentNode || !active) return;
+    bArena.appendChild(b);
+    bTimers.push(setTimeout(() => {
+      if (!b.parentNode || !bActive) return;
       b.remove();
-      missed++;
-      missEl.textContent = missed + " / 5";
-      arena.classList.add("b-arena-flash");
-      setTimeout(() => arena.classList.remove("b-arena-flash"), 280);
-      if (missed >= MAX_MISS) endGame();
-    }, duration * 1000 + 50);
-
-    timers.push(missID);
+      bMissed++;
+      bMissEl.textContent = bMissed + " / 5";
+      bArena.classList.add("b-arena-flash");
+      setTimeout(() => bArena.classList.remove("b-arena-flash"), 280);
+      if (bMissed >= BMISS) endBalloon();
+    }, dur * 1000 + 50));
   }
 
-  function doPop(b, note) {
-    const rect  = arena.getBoundingClientRect();
-    const bRect = b.getBoundingClientRect();
-    const x = bRect.left - rect.left + bRect.width / 2;
-    const y = bRect.top  - rect.top  + bRect.height / 2;
+  function bPop(b, note) {
+    const r = bArena.getBoundingClientRect();
+    const br = b.getBoundingClientRect();
+    const x = br.left - r.left + br.width / 2;
+    const y = br.top - r.top + br.height / 2;
     b.remove();
-
-    score++;
-    scoreEl.textContent = score;
-    level = 1 + Math.floor(score / 10);
-    levelEl.textContent = level;
-
+    bScore++;
+    bScoreEl.textContent = bScore;
+    bLevel = 1 + Math.floor(bScore / 10);
+    bLevelEl.textContent = bLevel;
     const burst = document.createElement("div");
     burst.className = "b-pop-burst";
     burst.textContent = "💥";
     burst.style.left = (x - 20) + "px";
-    burst.style.top  = (y - 20) + "px";
-    arena.appendChild(burst);
+    burst.style.top = (y - 20) + "px";
+    bArena.appendChild(burst);
     setTimeout(() => burst.remove(), 560);
-
     const np = document.createElement("div");
     np.className = "b-note-pop";
     np.textContent = note;
-    np.style.left = Math.max(4, Math.min(x - 60, arena.offsetWidth - 145)) + "px";
-    np.style.top  = (y - 10) + "px";
-    arena.appendChild(np);
+    np.style.left = Math.max(4, Math.min(x - 60, bArena.offsetWidth - 145)) + "px";
+    np.style.top = (y - 10) + "px";
+    bArena.appendChild(np);
     setTimeout(() => np.remove(), 1000);
   }
 
-  function endGame() {
-    active = false;
-    clearTimeout(gameTimerID);
-    timers.forEach(clearTimeout);
-    timers = [];
-    arena.innerHTML = "";
+  function endBalloon() {
+    bActive = false;
+    clearTimeout(bGameTimer);
+    bTimers.forEach(clearTimeout);
+    bTimers = [];
+    bArena.innerHTML = "";
+    bOverEl.textContent = bScore >= 30 ? `🏆 ${bScore} pts — Incredible Sudu! 🏆`
+      : bScore >= 15 ? `🌟 ${bScore} pts — Amazing! 🌟`
+      : bScore >= 5 ? `💕 ${bScore} pts — Nice try! 💕`
+      : `🥰 ${bScore} pts — You're adorable anyway! 🥰`;
+    bStartBtn.textContent = "🎈 Play Again";
+    bStartBtn.classList.remove("hidden");
+  }
 
-    let msg;
-    if (score >= 30)      msg = `🏆 ${score} pts — Incredible Sudu! 🏆`;
-    else if (score >= 15) msg = `🌟 ${score} pts — Amazing! 🌟`;
-    else if (score >= 5)  msg = `💕 ${score} pts — Nice try! 💕`;
-    else                  msg = `🥰 ${score} pts — You're adorable anyway! 🥰`;
+  /* ════════════════════════
+     GAME 2 — MEMORY MATCH
+  ════════════════════════ */
+  const MEM_EMOJIS = ["💖", "🌸", "✨", "🎀", "💝", "🌺", "🦋", "🎊"];
+  let mMoves = 0, mPairs = 0, mTimer = null, mSeconds = 0, mFlipped = [], mLocked = false;
 
-    overEl.textContent      = msg;
-    startBtn.textContent    = "🎈 Play Again";
-    startBtn.style.display  = "inline-block";
+  const mMovesEl = document.getElementById("mMoves");
+  const mPairsEl = document.getElementById("mPairs");
+  const mTimeEl = document.getElementById("mTime");
+  const mGrid = document.getElementById("memGrid");
+  const mOverEl = document.getElementById("mGameover");
+  const mStartBtn = document.getElementById("mStartBtn");
+
+  mStartBtn.addEventListener("click", startMemory);
+
+  function resetMemory() {
+    stopMemory();
+    mMovesEl.textContent = "0";
+    mPairsEl.textContent = "0 / 8";
+    mTimeEl.textContent = "0s";
+    mOverEl.textContent = "";
+    mStartBtn.textContent = "🧩 Start Game";
+    mStartBtn.classList.remove("hidden");
+    mGrid.innerHTML = "";
+  }
+
+  function stopMemory() {
+    clearInterval(mTimer);
+    mTimer = null;
+  }
+
+  function startMemory() {
+    stopMemory();
+    mMoves = 0;
+    mPairs = 0;
+    mSeconds = 0;
+    mFlipped = [];
+    mLocked = false;
+    mMovesEl.textContent = 0;
+    mPairsEl.textContent = "0 / 8";
+    mTimeEl.textContent = "0s";
+    mOverEl.textContent = "";
+    mStartBtn.classList.add("hidden");
+    buildMemoryGrid();
+    mTimer = setInterval(() => {
+      mSeconds++;
+      mTimeEl.textContent = mSeconds + "s";
+    }, 1000);
+  }
+
+  function buildMemoryGrid() {
+    const cards = [...MEM_EMOJIS, ...MEM_EMOJIS].sort(() => Math.random() - 0.5);
+    mGrid.innerHTML = "";
+    cards.forEach(emoji => {
+      const card = document.createElement("div");
+      card.className = "mem-card";
+      card.innerHTML = `<div class="card-front">❓</div><div class="card-back">${emoji}</div>`;
+      card.dataset.emoji = emoji;
+      card.addEventListener("click", () => flipCard(card));
+      mGrid.appendChild(card);
+    });
+  }
+
+  function flipCard(card) {
+    if (mLocked || card.classList.contains("flipped") || card.classList.contains("matched")) return;
+    card.classList.add("flipped");
+    mFlipped.push(card);
+    if (mFlipped.length === 2) {
+      mLocked = true;
+      mMoves++;
+      mMovesEl.textContent = mMoves;
+      const [a, b] = mFlipped;
+      if (a.dataset.emoji === b.dataset.emoji) {
+        a.classList.add("matched");
+        b.classList.add("matched");
+        mPairs++;
+        mPairsEl.textContent = mPairs + " / 8";
+        mFlipped = [];
+        mLocked = false;
+        if (mPairs === 8) endMemory();
+      } else {
+        setTimeout(() => {
+          a.classList.remove("flipped");
+          b.classList.remove("flipped");
+          mFlipped = [];
+          mLocked = false;
+        }, 900);
+      }
+    }
+  }
+
+  function endMemory() {
+    stopMemory();
+    const rating = mMoves <= 16 ? "🏆 Perfect memory!" : mMoves <= 24 ? "🌟 Impressive!" : mMoves <= 36 ? "💕 Well done!" : "🥰 You did it!";
+    mOverEl.textContent = `${rating} Completed in ${mSeconds}s with ${mMoves} moves!`;
+    mStartBtn.textContent = "🧩 Play Again";
+    mStartBtn.classList.remove("hidden");
   }
 })();
 
+/* ════════════════════════════════
+   MAIN PAGE BUTTON → SHARED GAME ROOM
+════════════════════════════════ */
+(function () {
+  const openGamesBtn = document.getElementById("openGamesBtn");
+  const gamePanel = document.getElementById("gamePanel");
+
+  if (!openGamesBtn || !gamePanel) return;
+
+  openGamesBtn.addEventListener("click", () => {
+    gamePanel.classList.add("open");
+    const picker = document.getElementById("gamePicker");
+    const title = document.getElementById("gamePanelTitle");
+    if (picker) picker.classList.remove("hidden");
+    ["gameBaloon", "gameMemory"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add("hidden");
+    });
+    if (title) title.textContent = "🎮 Game Room";
+  });
+})();
