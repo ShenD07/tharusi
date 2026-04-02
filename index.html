@@ -37,34 +37,12 @@
         </div>
         <div class="countdown-clue" id="countdownClue"></div>
 
-        <!-- BORED BUTTON -->
         <button class="bored-btn" id="boredBtn">😴 Boring… let's play a game!</button>
-
-      </div>
-    </div>
-
-    <!-- GAME PANEL OVERLAY -->
-    <div class="game-panel" id="gamePanel">
-      <div class="game-panel-inner">
-        <div class="game-panel-header">
-          <span class="game-panel-title">🎈 Pop the Balloons!</span>
-          <button class="game-close-btn" id="gameCloseBtn">✕ Back to Countdown</button>
-        </div>
-        <p class="game-panel-sub">Each balloon hides a little love note 💕</p>
-        <div class="b-hud">
-          <div class="b-hud-box"><div class="b-hud-label">SCORE</div><div class="b-hud-val" id="bScore">0</div></div>
-          <div class="b-hud-box"><div class="b-hud-label">MISSED</div><div class="b-hud-val" id="bMissed">0 / 5</div></div>
-          <div class="b-hud-box"><div class="b-hud-label">LEVEL</div><div class="b-hud-val" id="bLevel">1</div></div>
-        </div>
-        <div class="b-arena" id="bArena"></div>
-        <div class="b-gameover" id="bGameover"></div>
-        <button class="b-start-btn" id="bStartBtn">🎈 Start Game</button>
       </div>
     </div>
 
     <div class="gift-stage hidden" id="giftStage">
       <div class="gift-aura"></div>
-
       <button class="gift-trigger" id="giftTrigger" aria-label="Open gift">
         <svg class="gift-svg" viewBox="0 0 420 430" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -122,6 +100,59 @@
     </div>
   </div>
 
+    <!-- GAME HUB PANEL -->
+    <div class="game-panel" id="gamePanel">
+      <div class="game-panel-inner">
+        <div class="game-panel-header">
+          <span class="game-panel-title" id="gamePanelTitle">🎮 Game Room</span>
+          <button class="game-close-btn" id="gameCloseBtn">✕ Back to Countdown</button>
+        </div>
+
+        <div id="gamePicker">
+          <p class="game-panel-sub">Pick a game to play while you wait 💕</p>
+          <div class="game-pick-grid">
+            <button class="game-pick-card" data-game="balloon">
+              <div class="game-pick-icon">🎈</div>
+              <div class="game-pick-name">Pop Balloons</div>
+              <div class="game-pick-desc">Tap fast before they escape!</div>
+            </button>
+            <button class="game-pick-card" data-game="memory">
+              <div class="game-pick-icon">🧩</div>
+              <div class="game-pick-name">Memory Match</div>
+              <div class="game-pick-desc">Find all the matching pairs!</div>
+            </button>
+          </div>
+        </div>
+
+        <div id="gameBaloon" class="game-screen hidden">
+          <button class="back-to-picker" id="backFromBalloon">← Games</button>
+          <p class="game-panel-sub">Pop before they fly away! 💕</p>
+          <div class="b-hud">
+            <div class="b-hud-box"><div class="b-hud-label">SCORE</div><div class="b-hud-val" id="bScore">0</div></div>
+            <div class="b-hud-box"><div class="b-hud-label">MISSED</div><div class="b-hud-val" id="bMissed">0 / 5</div></div>
+            <div class="b-hud-box"><div class="b-hud-label">LEVEL</div><div class="b-hud-val" id="bLevel">1</div></div>
+          </div>
+          <div class="b-arena" id="bArena"></div>
+          <div class="b-gameover" id="bGameover"></div>
+          <button class="b-start-btn" id="bStartBtn">🎈 Start Game</button>
+        </div>
+
+        <div id="gameMemory" class="game-screen hidden">
+          <button class="back-to-picker" id="backFromMemory">← Games</button>
+          <p class="game-panel-sub">Find all matching pairs! 🧩</p>
+          <div class="b-hud">
+            <div class="b-hud-box"><div class="b-hud-label">MOVES</div><div class="b-hud-val" id="mMoves">0</div></div>
+            <div class="b-hud-box"><div class="b-hud-label">PAIRS</div><div class="b-hud-val" id="mPairs">0 / 8</div></div>
+            <div class="b-hud-box"><div class="b-hud-label">TIME</div><div class="b-hud-val" id="mTime">0s</div></div>
+          </div>
+          <div class="mem-grid" id="memGrid"></div>
+          <div class="b-gameover" id="mGameover"></div>
+          <button class="b-start-btn" id="mStartBtn">🧩 Start Game</button>
+        </div>
+      </div>
+    </div>
+
+
   <!-- MAIN PAGE -->
   <div class="main-page hidden" id="mainPage">
     <div class="floating-love" id="floatingLove"></div>
@@ -144,12 +175,9 @@
           </p>
 
           <div class="btn-row">
-            <button class="btn-outline" id="openLetterBtn">
-              🎁 Open Love Letter
-            </button>
-            <button class="btn-primary" id="openSurpriseBtn">
-              ✨ Celebrate
-            </button>
+            <button class="btn-outline" id="openLetterBtn">🎁 Open Love Letter</button>
+            <button class="btn-primary" id="openSurpriseBtn">✨ Celebrate</button>
+            <button class="btn-outline" id="openGamesBtn">🎮 Play Games</button>
           </div>
         </div>
 
@@ -202,6 +230,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
