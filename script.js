@@ -1,5 +1,5 @@
 const CONFIG = {
-  testMode: false,
+  testMode: true,
   testSeconds: 10,
   realTargetDate: "2026-06-17T00:00:00",
   showClues: true
@@ -581,4 +581,279 @@ setInterval(updateClue, 7000);
     });
     if (title) title.textContent = "🎮 Game Room";
   });
+})();
+
+/* ════════════════════════════════
+   HAPTIC HELPER
+════════════════════════════════ */
+function haptic(pattern) {
+  if (navigator.vibrate) {
+    navigator.vibrate(pattern);
+  }
+}
+
+/* ════════════════════════════════
+   PINK SCREEN FLASH (gift open)
+════════════════════════════════ */
+(function () {
+  const flash = document.getElementById("pinkFlash");
+  if (!flash) return;
+
+  // Hook into gift trigger click
+  const giftBtn = document.getElementById("giftTrigger");
+  if (giftBtn) {
+    giftBtn.addEventListener("click", () => {
+      // slight delay to sync with lid animation
+      setTimeout(() => {
+        flash.classList.remove("flash");
+        void flash.offsetWidth; // reflow to restart animation
+        flash.classList.add("flash");
+        // haptic: strong double pulse on gift open
+        haptic([80, 60, 120]);
+      }, 400);
+    });
+  }
+
+  // haptic on surprise overlay open
+  const surpriseBtn = document.getElementById("openSurpriseBtn");
+  if (surpriseBtn) {
+    surpriseBtn.addEventListener("click", () => haptic([40, 30, 40]));
+  }
+
+  // haptic on love letter open
+  const letterBtn = document.getElementById("openLetterBtn");
+  if (letterBtn) {
+    letterBtn.addEventListener("click", () => haptic([30]));
+  }
+
+  // haptic on celebrate / close surprise (joy pulse)
+  const closeSurprise = document.getElementById("closeSurpriseBtn");
+  if (closeSurprise) {
+    closeSurprise.addEventListener("click", () => haptic([20, 20, 20, 20, 60]));
+  }
+})();
+
+/* ════════════════════════════════
+   PARALLAX STARFIELD (main page)
+════════════════════════════════ */
+(function () {
+  const canvas = document.getElementById("starCanvas");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  let W, H, stars = [], tiltX = 0, tiltY = 0, mouseX = 0, mouseY = 0;
+  let animating = false;
+
+  const STAR_COUNT = 180;
+  const LAYERS = 3; // parallax depth layers
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function makeStars() {
+    stars = [];
+    for (let i = 0; i < STAR_COUNT; i++) {
+      const layer = 1 + Math.floor(Math.random() * LAYERS); // 1=far,2=mid,3=close
+      stars.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        baseX: Math.random() * W,
+        baseY: Math.random() * H,
+        size: layer === 3 ? 1.8 + Math.random() * 1.4
+             : layer === 2 ? 1.0 + Math.random() * 1.0
+             : 0.4 + Math.random() * 0.7,
+        layer,
+        speed: 0.003 + Math.random() * 0.004,   // twinkle speed
+        phase: Math.random() * Math.PI * 2,
+        color: Math.random() < 0.15
+          ? `hsl(${300 + Math.random()*60}, 100%, 85%)` // pinkish
+          : `hsl(${200 + Math.random()*40}, 60%, 90%)`, // cool white
+        parallaxStrength: layer * 18,
+      });
+    }
+  }
+
+  function drawStars(ts) {
+    ctx.clearRect(0, 0, W, H);
+
+    stars.forEach(s => {
+      s.phase += s.speed;
+      const twinkle = 0.45 + 0.55 * Math.sin(s.phase);
+
+      // parallax offset from tilt / mouse
+      const px = s.baseX + tiltX * s.parallaxStrength;
+      const py = s.baseY + tiltY * s.parallaxStrength;
+
+      // wrap around edges
+      s.x = ((px % W) + W) % W;
+      s.y = ((py % H) + H) % H;
+
+      ctx.save();
+      ctx.globalAlpha = twinkle * (s.layer === 3 ? 0.95 : s.layer === 2 ? 0.7 : 0.45);
+      ctx.fillStyle = s.color;
+      ctx.shadowColor = s.color;
+      ctx.shadowBlur = s.layer === 3 ? 6 : 2;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+  }
+
+  function loop(ts) {
+    if (!animating) return;
+    drawStars(ts);
+    requestAnimationFrame(loop);
+  }
+
+  function start() {
+    resize();
+    makeStars();
+    canvas.classList.add("visible");
+    animating = true;
+    requestAnimationFrame(loop);
+  }
+
+  // Gyroscope (mobile parallax)
+  window.addEventListener("deviceorientation", e => {
+    if (e.beta !== null && e.gamma !== null) {
+      // gamma: left/right tilt (-90 to 90), beta: front/back (-180 to 180)
+      tiltX = Math.max(-1, Math.min(1, e.gamma / 45));
+      tiltY = Math.max(-1, Math.min(1, (e.beta - 45) / 45));
+    }
+  });
+
+  // Mouse parallax (desktop)
+  window.addEventListener("mousemove", e => {
+    mouseX = (e.clientX / window.innerWidth  - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    // smooth towards mouse
+    tiltX += (mouseX - tiltX) * 0.04;
+    tiltY += (mouseY - tiltY) * 0.04;
+  });
+
+  // Touch drag parallax (mobile no gyro fallback)
+  window.addEventListener("touchmove", e => {
+    const t = e.touches[0];
+    const tx = (t.clientX / window.innerWidth  - 0.5) * 2;
+    const ty = (t.clientY / window.innerHeight - 0.5) * 2;
+    tiltX += (tx - tiltX) * 0.06;
+    tiltY += (ty - tiltY) * 0.06;
+  }, { passive: true });
+
+  window.addEventListener("resize", () => { resize(); makeStars(); });
+
+  // Start when main page becomes visible
+  // Observe mainPage unhide
+  const mainPage = document.getElementById("mainPage");
+  if (mainPage) {
+    const obs = new MutationObserver(() => {
+      if (!mainPage.classList.contains("hidden") && !animating) {
+        start();
+      }
+    });
+    obs.observe(mainPage, { attributes: true, attributeFilter: ["class"] });
+    // In case already visible
+    if (!mainPage.classList.contains("hidden")) start();
+  }
+})();
+
+/* ════════════════════════════════
+   MUSIC & SOUND SYSTEM
+════════════════════════════════ */
+(function () {
+  const audioCountdown = document.getElementById("audioCountdown");
+  const audioMain      = document.getElementById("audioMain");
+  const audioGift      = document.getElementById("audioGift");
+  const muteBtn        = document.getElementById("muteBtn");
+
+  if (!muteBtn) return;
+
+  let muted = false;
+
+  // Volume levels
+  if (audioCountdown) { audioCountdown.volume = 0.35; }
+  if (audioMain)      { audioMain.volume      = 0.45; }
+  if (audioGift)      { audioGift.volume      = 0.8;  }
+
+  /* ── Try to play countdown music immediately ── */
+  function tryPlayCountdown() {
+    if (!audioCountdown || muted) return;
+    audioCountdown.play().catch(() => {
+      // Autoplay blocked — wait for first interaction
+      const unlock = () => {
+        if (!muted) audioCountdown.play().catch(() => {});
+        document.removeEventListener("touchstart", unlock);
+        document.removeEventListener("click", unlock);
+      };
+      document.addEventListener("touchstart", unlock, { once: true });
+      document.addEventListener("click", unlock, { once: true });
+    });
+  }
+  tryPlayCountdown();
+
+  /* ── Switch to HBD music when main page reveals ── */
+  const mainPage = document.getElementById("mainPage");
+  if (mainPage) {
+    const obs = new MutationObserver(() => {
+      if (!mainPage.classList.contains("hidden")) {
+        // fade out countdown music
+        if (audioCountdown) {
+          const fadeOut = setInterval(() => {
+            if (audioCountdown.volume > 0.03) {
+              audioCountdown.volume -= 0.03;
+            } else {
+              audioCountdown.pause();
+              audioCountdown.volume = 0;
+              clearInterval(fadeOut);
+            }
+          }, 80);
+        }
+        // start HBD music
+        setTimeout(() => {
+          if (!muted && audioMain) audioMain.play().catch(() => {});
+        }, 600);
+      }
+    });
+    obs.observe(mainPage, { attributes: true, attributeFilter: ["class"] });
+  }
+
+  /* ── Gift box sound effect ── */
+  const giftTriggerEl = document.getElementById("giftTrigger");
+  if (giftTriggerEl && audioGift) {
+    giftTriggerEl.addEventListener("click", () => {
+      if (!muted) {
+        audioGift.currentTime = 0;
+        audioGift.play().catch(() => {});
+      }
+    });
+  }
+
+  /* ── Mute / Unmute ── */
+  function setMute(val) {
+    muted = val;
+    muteBtn.textContent = muted ? "🔇" : "🔊";
+    muteBtn.classList.toggle("muted", muted);
+
+    [audioCountdown, audioMain, audioGift].forEach(a => {
+      if (!a) return;
+      a.muted = muted;
+    });
+
+    // if unmuting and a page is active, resume correct track
+    if (!muted) {
+      const onMain = mainPage && !mainPage.classList.contains("hidden");
+      if (onMain) {
+        audioMain && audioMain.play().catch(() => {});
+      } else {
+        audioCountdown && audioCountdown.play().catch(() => {});
+      }
+    }
+    haptic(muted ? [30] : [15, 10, 15]);
+  }
+
+  muteBtn.addEventListener("click", () => setMute(!muted));
+
 })();
