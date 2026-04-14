@@ -7,7 +7,72 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- PRE REVEAL -->
+<div id="nlaSection" class="hidden" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to bottom, #3f001f, #35002f, #4a0035);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    color: rgba(255, 235, 245, 0.85);
+">
+    <div style="position: absolute; width: 6px; height: 6px; background: rgba(255,255,255,0.2); border-radius: 50%; top: -10px; left: 10%; animation: nlaFall 7s linear infinite;"></div>
+    <div style="position: absolute; width: 8px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 50%; top: -10px; left: 80%; animation: nlaFall 10s linear infinite; animation-delay: 2s;"></div>
+
+    <div style="width: min(700px, 90%); text-align: center; animation: nlaFadeIn 1.5s ease-out;">
+        <div style="margin-bottom: 20px;">
+            <span style="font-size: 80px; display: block; margin-bottom: 10px;">💔</span>
+            <h1 style="
+                font-size: clamp(32px, 8vw, 48px);
+                margin: 0;
+                background: linear-gradient(135deg, #ffd2e6, #ff8ec7);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                font-weight: bold;
+            ">No Longer Available</h1>
+            <div style="width: 80px; height: 2px; background: rgba(255,255,255,0.2); margin: 20px auto;"></div>
+        </div>
+
+        <p style="font-size: 18px; line-height: 1.6; font-style: italic; margin-bottom: 30px;">
+            Some beautiful moments are meant to be treasured, not forgotten.
+        </p>
+
+        <div style="
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        ">
+            <p style="margin: 0; font-size: 16px; line-height: 1.8; color: rgba(255, 235, 245, 0.7);">
+                This page once held something special. Though circumstances have changed, the memories remain untouched, 
+                preserved like flowers pressed between the pages of time.
+            </p>
+        </div>
+
+        <div style="margin-top: 50px; font-size: 12px; letter-spacing: 3px; opacity: 0.5; text-transform: uppercase;">
+            Take care of yourself
+        </div>
+    </div>
+
+    <style>
+        @keyframes nlaFall {
+            to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+        @keyframes nlaFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</div>  
+<!-- PRE REVEAL -->
   <div class="pre-reveal" id="preReveal">
     <div class="countdown-theme-overlay" id="countdownThemeOverlay"></div>
     <div class="countdown-rain" id="countdownRain"></div>
@@ -105,7 +170,7 @@
       <div class="game-panel-inner">
         <div class="game-panel-header">
           <span class="game-panel-title" id="gamePanelTitle">🎮 Game Room</span>
-          <button class="game-close-btn" id="gameCloseBtn">✕ Back</button>
+          <button class="game-close-btn" id="gameCloseBtn">✕ Back to Countdown</button>
         </div>
 
         <div id="gamePicker">
@@ -212,7 +277,7 @@
           more smiles, more peace, more success, and more moments that make your heart feel full.
         </p>
         <p>
-          I love you more than words can fully explain. Happy birthday, Sudu. 💖
+          I love you more than words can fully explain. Happy birthday, baby. 💖
         </p>
         <p class="sign">— Yours forever</p>
       </div>
