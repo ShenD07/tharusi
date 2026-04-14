@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>No Longer Available</title>
+  <style>
+    :root {
+      --bg1: #3f001f;
+      --bg2: #35002f;
+      --bg3: #4a0035;
+      --white: #ffffff;
+      --soft: rgba(255,255,255,0.08);
+      --soft2: rgba(255,255,255,0.12);
+      --border: rgba(255,255,255,0.16);
+      --text-soft: rgba(255, 235, 245, 0.85);
+      --pink: #ff8ec7;
+      --rose: #ffd2e6;
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, var(--bg1), var(--bg2), var(--bg3));
+      color: var(--text-soft);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    .nla-container {
+      width: min(700px, 92%);
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .nla-header {
+      margin-bottom: 50px;
+    }
+
+    .nla-icon {
+      font-size: 80px;
+      margin-bottom: 30px;
+      display: block;
+      opacity: 0.85;
+      animation: heartbeat 2s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 15px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--rose), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nla-divider {
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--pink), transparent);
+      margin: 25px auto 40px;
+      opacity: 0.6;
+    }
+
+    .nla-message {
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      color: var(--text-soft);
+      font-style: italic;
+    }
+
+    .nla-memory-box {
+      background: var(--soft2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      margin: 40px 0;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .nla-memory-box p {
+      font-size: 15px;
+      line-height: 1.9;
+      color: rgba(255, 235, 245, 0.75);
+    }
+
+    .nla-closing {
+      font-size: 16px;
+      color: rgba(255, 235, 245, 0.65);
+      margin-top: 35px;
+      line-height: 1.8;
+    }
+
+    .nla-signature {
+      margin-top: 40px;
+      padding-top: 25px;
+      border-top: 1px solid var(--border);
+      font-size: 14px;
+      color: rgba(255, 235, 245, 0.5);
+      letter-spacing: 2px;
+    }
+
+    .nla-action {
+      margin-top: 50px;
+    }
+
+    .nla-btn {
+      display: inline-block;
+      padding: 16px 40px;
+      background: rgba(255,255,255,0.08);
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 18px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 15px;
+      transition: 0.25s ease;
+      cursor: pointer;
+    }
+
+    .nla-btn:hover {
+      background: rgba(255,255,255,0.12);
+      transform: translateY(-2px);
+    }
+
+    /* Floating petals animation */
+    .nla-petal {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      background: rgba(255, 214, 230, 0.4);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .petal-1 { top: -10px; left: 15%; animation: fall 6s linear infinite; animation-delay: 0s; }
+    .petal-2 { top: -10px; left: 35%; animation: fall 7s linear infinite; animation-delay: 1s; }
+    .petal-3 { top: -10px; left: 50%; animation: fall 8s linear infinite; animation-delay: 2s; }
+    .petal-4 { top: -10px; left: 70%; animation: fall 6.5s linear infinite; animation-delay: 1.5s; }
+    .petal-5 { top: -10px; left: 85%; animation: fall 7.5s linear infinite; animation-delay: 2.5s; }
+
+    .fade-in {
+      animation: fadeIn 1.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Falling petals -->
+  <div class="nla-petal petal-1"></div>
+  <div class="nla-petal petal-2"></div>
+  <div class="nla-petal petal-3"></div>
+  <div class="nla-petal petal-4"></div>
+  <div class="nla-petal petal-5"></div>
+
+  <div class="nla-container fade-in">
+    <div class="nla-header">
+      <span class="nla-icon">💔</span>
+      <h1>No Longer Available</h1>
+      <div class="nla-divider"></div>
+    </div>
+
+    <p class="nla-message">
+      Some beautiful moments are meant to be treasured, not forgotten.
+    </p>
+
+    <div class="nla-memory-box">
+      <p>
+        This page once held something special a celebration of someone equally special. 
+        Though circumstances have changed, the memories remain untouched, 
+        preserved like flowers pressed between the pages of time.
+      </p>
+    </div>
+
+    <p class="nla-closing">
+      Not all love stories end with "forever," but they all leave marks that last. 
+      Thank you for the moments that made life a little more beautiful.
+    </p>
+
+    <div class="nla-signature">
+       Take care of yourself
+    </div>
+
+    
+  </div>
+</body>
+</html>
