@@ -1,5 +1,5 @@
 /* --- CONFIGURATION --- */
-const SITE_MODE = "ACTIVE"; // Change to "NLA" to switch the page to No Longer Available mode
+const SITE_MODE = "NLA"; // Change to "NLA" to switch the page to No Longer Available mode
 
 (function initSiteMode() {
   document.addEventListener("DOMContentLoaded", () => {
