@@ -1,3 +1,9 @@
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === 'visible') {
+        window.location.reload(); // This forces a fresh download of your files
+    }
+});
+
 /* --- CONFIGURATION --- */
 const SITE_MODE = "NLA"; // Change to "NLA" to switch the page to No Longer Available mode
 
