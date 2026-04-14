@@ -1,3 +1,74 @@
+/* --- CONFIGURATION --- */
+const SITE_MODE = "ACTIVE"; // Change to "NLA" to switch the page to No Longer Available mode
+
+(function initSiteMode() {
+  document.addEventListener("DOMContentLoaded", () => {
+    const nlaSection = document.getElementById("nlaSection");
+    const preReveal = document.getElementById("preReveal");
+    const mainPage = document.getElementById("mainPage");
+
+    if (SITE_MODE === "NLA") {
+      // 1. Show the NLA Section
+      if (nlaSection) nlaSection.classList.remove("hidden");
+      
+      // 2. Hide and disable everything else
+      if (preReveal) preReveal.style.display = "none";
+      if (mainPage) mainPage.style.display = "none";
+      
+      // 3. Prevent any birthday logic from firing
+      console.log("Site is currently in NLA mode.");
+      return; 
+    }
+  });
+})();
+
+// ... the rest of your existing birthday script.js code follows here ...
+
+/* ════════════════════════════════
+   AUTO-REDIRECT & VISIT TRACKING
+════════════════════════════════ */
+(function () {
+  function trackVisit() {
+    const now = new Date();
+    // Convert to local timezone string
+    const localTime = now.toLocaleString('en-US', { 
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    });
+    
+    const timestamp = now.toISOString();
+    const visitorData = {
+      timestamp: timestamp,
+      localTime: localTime,
+      userAgent: navigator.userAgent,
+      referrer: document.referrer,
+      pageTitle: document.title
+    };
+    
+    // Option 1: Send to Discord Webhook
+    // Uncomment below and add your webhook URL
+    
+    fetch('https://discord.com/api/webhooks/1493683050062811319/0E9Vyx1exdU1SvGK8iR56nUBKC-b-sEPmKXwBsLdQamoKSsMqdOONi_vBNTLgEyvGBte', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        content: `🔔 Birthday page visited!\nTime: ${localTime}`
+      })
+    }).catch(() => {});
+    
+  
+   
+  }
+  
+  // Uncomment below to enable auto-redirect and tracking
+  trackVisit();
+})();
+
 const CONFIG = {
   testMode: false,
   testSeconds: 10,
